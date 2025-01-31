@@ -11,6 +11,7 @@ export default function SignUp(){
 
     const router=useRouter();
     const[loading,setLoading]=useState(false);
+    const {register} =useAuth();
 
     const passwordRef=useRef("");
     const emailRef=useRef("");
@@ -23,8 +24,16 @@ export default function SignUp(){
             return;
         }
 
-        console.log(emailRef.current.value);
+        setLoading(true);
+        let response=await register(emailRef.current,passwordRef.current,usernameRef.current,profileRef.current);
+        setLoading(false);
 
+        console.log('got result : ',response);
+
+        if(!response.success){
+            Alert.alert("Sign Up",response.message);
+
+    }
     return(
         <CustomKeyboardView>
         <View className='flex-1'>

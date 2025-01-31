@@ -10,6 +10,7 @@ export default function SignIn(){
 
     const router=useRouter();
     const[loading,setLoading]=useState(false);
+    const {login} =useAuth();
 
     const passwordRef=useRef("");
     const emailRef=useRef("");
@@ -18,6 +19,16 @@ export default function SignIn(){
         if(!emailRef.current||!passwordRef.current){  
             Alert.alert("Please fill in all fields");
             return;
+        }
+
+        setLoading(true);
+        const response=await login(emailRef.current,passwordRef.current);
+        setLoading(false);
+
+        console.log('Sign In result : ',response);
+
+        if(!response.success){
+            Alert.alert("Sign In",response.msg);
         }
 
         console.log(emailRef.current.value);
