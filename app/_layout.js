@@ -1,33 +1,38 @@
-import {View,Text} from 'react-native'
-import React from 'react'
+import { View, Text, useEffect } from 'react-native';
+import React from 'react';
 import { Slot } from "expo-router";
+import { useAuth } from '../hooks/useAuth'; // Make sure this hook exists
+import { useSegments } from 'expo-router'; // Ensure this import is correct
+import { useRouter } from 'next/router'; // Assuming you're using Next.js
 import "../global.css";
-import { use } from 'react';
+import { MenuProvider } from 'react-native-popup-menu';
 
-const MainLayout = ()=>{
-    const {isAuthenticated} = useAuth();
+const MainLayout = () => {
+    const { isAuthenticated } = useAuth();
     const segments = useSegments();
     const router = useRouter();
 
-    useEffect(()=>{
-        // check if user authenticated or not
-        if(typeof isAuthenticated === "undefined")return;
+    useEffect(() => {
+        // Check if user is authenticated or not
+        if (typeof isAuthenticated === "undefined") return;
         const inApp = segments[0] === "app";
-        if(isAuthenticated && !inApp){
+
+        if (isAuthenticated && !inApp) {
             router.replace('home');
-        }
-        else if(!isAuthenticated ==false){
+        } else if (!isAuthenticated) {
             router.replace('signIn');
         }
-    },[isAuthenticated])
+    }, [isAuthenticated, segments, router]);
 
-    return <Slot />
-}
+    return <Slot />;
+};
 
-export default function _layout(){
-return(
-    <AuthContextProvider>
-        <MainLayout />
-    </AuthContextProvider>
-)
+export default function _layout() {
+    return (
+        <MenuProvider>
+            <AuthContextProvider>
+                <MainLayout />
+            </AuthContextProvider>
+        </MenuProvider>
+    );
 }

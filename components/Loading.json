@@ -1,0 +1,18 @@
+import { View } from 'react-native';
+import React from 'react';
+import LottieView from 'lottie-react-native';
+
+export default function Loading() {
+  const size = 100; // Set the desired size of the loading animation
+
+  return (
+    <View style={{ height: size, aspectRatio: 1 }}>
+      <LottieView
+        style={{ width: '100%', height: '100%' }}
+        source={require('../assets/animations/loading.json')} // Ensure this file exists
+        autoPlay
+        loop
+      />
+    </View>
+  );
+}

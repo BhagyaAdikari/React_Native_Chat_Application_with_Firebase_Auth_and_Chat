@@ -1,8 +1,20 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack'; // Import Stack from React Navigation
+import HomeHeader from './components/HomeHeader'; // Assuming you have a HomeHeader component
+import Home from './screens/Home'; // Import the Home screen
 
-export default function _layout() {
+const Stack = createStackNavigator();
+
+export default function Layout() {
   return (
-    <Stack/>
-  )
+    <Stack.Navigator>
+      <Stack.Screen
+        name="home"
+        component={Home} // Assuming the Home screen is defined elsewhere
+        options={{
+          header: () => <HomeHeader /> // Custom header
+        }}
+      />
+    </Stack.Navigator>
+  );
 }
