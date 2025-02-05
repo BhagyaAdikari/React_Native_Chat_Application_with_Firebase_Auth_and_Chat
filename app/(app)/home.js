@@ -1,42 +1,41 @@
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { useAuth } from '../../context/authContext'; // Correct import
+import { StatusBar } from 'expo-status-bar';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import ChatList from '../../components/ChatList';
 
 export default function StartPage() {
     const { logout, user } = useAuth();
     const [loading, setLoading] = useState(false); // State for handling loading
+    const [users,setUsers] = useState([1,2,3]);
 
-    const handleLogout = async () => {
-        try {
-            setLoading(true); // Set loading to true while logging out
-            await logout();
-            setLoading(false); // Set loading to false after logout is complete
-        } catch (error) {
-            console.error("Logout error:", error);
-            setLoading(false); // Set loading to false in case of error
+    useEffect(()=>{
+        if(user?.uid){
+            getUsers();
         }
-    };
+       
+    },[]);
+
+    const getUsers=async()=>{
+
+    }
 
     console.log('user data:', user);
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-            {loading ? (
-                <ActivityIndicator size="large" color="gray" />
-            ) : (
-                <Pressable
-                    onPress={handleLogout}
-                    style={{
-                        backgroundColor: 'blue',
-                        paddingHorizontal: 16,
-                        paddingVertical: 12,
-                        borderRadius: 16,
-                        marginTop: 16,
-                    }}
-                >
-                    <Text style={{ color: 'white', fontSize: 16 }}>Sign out</Text>
-                </Pressable>
-            )}
+        <View className='flex-1 bg-white'>
+           <StatusBar style="light" />
+
+           {
+            users.length>0?(
+                <ChatList users={users} />
+            ):(
+                <View className="flex items-center" style={{top:hp(30)}}>
+                    <ActivityIndicator size="large"/>
+                </View>
+            )
+           }
         </View>
     );
 }
